@@ -21,11 +21,26 @@ class RegistrationTest extends TestCase
         $response = $this->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'role_id' => 3, // Athlete
             'password' => 'password',
             'password_confirmation' => 'password',
         ]);
 
         $this->assertAuthenticated();
         $response->assertRedirect(route('dashboard', absolute: false));
+    }
+
+    public function test_new_trainers_can_register(): void
+    {
+        $response = $this->post('/register', [
+            'name' => 'Test Trainer',
+            'email' => 'trainer_test@example.com',
+            'role_id' => 2, // Trainer
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+        $response->assertRedirect('/trainer/dashboard');
     }
 }
